@@ -5,7 +5,7 @@ const { BadRequestError } = require("../expressError");
 // This generates an SQL query fragment for a partial update of a database record.
 // uses the UPDATE statement in sql to update the database
 // uses parameters "dataToUpdate" as an object representing the fields to update and their new values
-// i.e {firstName: "Sean", age: 30}
+// i.e {firstName: "Sean", age: 34}
 // uses parameter "jsToSql" as a mapping object that translates JS-style field names into SQL column names
 // i.e  { firstName: "first_name", lastName: "last_name" }
 
