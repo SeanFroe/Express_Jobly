@@ -43,9 +43,11 @@ class Company {
    *
    * searchFilters (optional)
    * -name (will find case-insensitive, partial matches)
+   * -minEmployees
+   * -maxEmployees
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
-
+  // PART 2.2 ADD FILTERS FOR name, minEmployees, maxEmployees
   static async findAll(searchFilters = {}) {
     const query = `SELECT handle,
                   name,
@@ -56,18 +58,32 @@ class Company {
     const whereExpressions = [];
     const queryValues = [];
 
-    const { name } = searchFilters;
+    const { name, minEmployees, maxEmployees } = searchFilters;
 
-    // For each search term, add to whereExpressionm and queryValues so
+    if (minEmployees > maxEmployees) {
+      throw new BadRequestError(" Min employees can not exceed max");
+    }
+
+    // For each search term, add to whereExpression and queryValues so
     // we can generate right SQL.
 
     if (name) {
       queryValues.push(`%${name}%`);
       whereExpressions.push(`name ILIKE $${queryValues.length}`);
+    }
 
-      if (whereExpressions > 0) {
-        query += " WHERE " + whereExpressions.join(" AND ");
-      }
+    if (minEmployees !== undefined) {
+      queryValues.push(minEmployees);
+      whereExpressions.push(`num_employees >= $${queryValues.length}`);
+    }
+
+    if (maxEmployees !== undefined) {
+      queryValues.push(maxEmployees);
+      whereExpressions.push(`num_employees <= $${queryValues.length}`);
+    }
+
+    if (whereExpressions > 0) {
+      query += " WHERE " + whereExpressions.join(" AND ");
     }
 
     // Finalize query and return results
