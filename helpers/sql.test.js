@@ -1,3 +1,5 @@
+//***************************************** PART 1.2 sql.test.js ************************************ */
+
 "use strict";
 
 const { sqlForPartialUpdate } = require("../helpers/sql");
