@@ -41,62 +41,40 @@ class Company {
 
   /** Find all companies.
    *
+   * searchFilters (optional)
+   * -name (will find case-insensitive, partial matches)
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
 
-  static async findAll(filters = {}) {
-    const { name } = filters;
-
-    if (name) {
-      return await this.filterByName(name);
-    }
-    const companiesRes = await db.query(
-      `SELECT handle,
+  static async findAll(searchFilters = {}) {
+    const query = `SELECT handle,
                   name,
                   description,
                   num_employees AS "numEmployees",
                   logo_url AS "logoUrl"
-           FROM companies
-           ORDER BY name`
-    );
+           FROM companies`;
+    const whereExpressions = [];
+    const queryValues = [];
+
+    const { name } = searchFilters;
+
+    // For each search term, add to whereExpressionm and queryValues so
+    // we can generate right SQL.
+
+    if (name) {
+      queryValues.push(`%${name}%`);
+      whereExpressions.push(`name ILIKE $${queryValues.length}`);
+
+      if (whereExpressions > 0) {
+        query += " WHERE " + whereExpressions.join(" AND ");
+      }
+    }
+
+    // Finalize query and return results
+
+    query += " ORDER BY name ";
+    const companiesRes = await db.query(query, queryValues);
     return companiesRes.rows;
-  }
-
-  /** Find a company by name or partial name.
- * 
- * returns [{ handle, name, description, numEmployees, logourl}, ...]
- * 
- * i.e filterByName(name) = 'name': 'net' returns {
-        handle: "study-networks",
-        name: "Study Networks",
-        description: "Educational network provider",
-        numEmployees: 50,
-        logoUrl: "http://example.com/logo.png",
-      },
-      {
-        handle: "networks-unlimited",
-        name: "Networks Unlimited",
-        description: "IT networking solutions",
-        numEmployees: 200,
-        logoUrl: "http://example.com/logo2.png",
-      },
-**/
-
-  static async filterByName(name) {
-    const query = `
-      SELECT handle,
-             name,
-             description,
-             num_employees AS "numEmployees",
-             logo_url AS "logoUrl"
-      FROM companies
-      WHERE LOWER(name) LIKE $1
-      ORDER BY name`;
-
-    const queryValues = [`%${name.toLowerCase()}%`];
-
-    const result = await db.query(query, queryValues);
-    return result.rows;
   }
 
   /** Given a company handle, return data about company.

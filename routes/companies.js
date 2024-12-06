@@ -53,7 +53,7 @@ router.get("/", async function (req, res, next) {
   try {
     const companies = await Company.findAll();
     // PART 2.1 filter for a single company
-    const company = await Company.name.filter().toLowerCase();
+    // const company = await Company.name.filter().toLowerCase();
     return res.json({ companies }); //|| { company });
     //filter for a single company
   } catch (err) {
