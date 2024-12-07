@@ -50,6 +50,8 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
  */
 
 router.get("/", async function (req, res, next) {
+  const q = req.query;
+
   try {
     const companies = await Company.findAll();
     // PART 2.1 filter for a single company

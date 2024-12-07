@@ -86,6 +86,18 @@ describe("findAll", function () {
       },
     ]);
   });
+  test("works: by name", async function () {
+    const companies = await Company.findAll({ name: "1" });
+    expect(companies).toEqual([
+      {
+        handle: "c1",
+        name: "C1",
+        description: "Desc1",
+        numEmployees: 1,
+        logoUrl: "http://c1.img",
+      },
+    ]);
+  });
 });
 
 /************************************** get */
@@ -109,26 +121,6 @@ describe("get", function () {
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
-  });
-
-  test("filters companies by name", async function () {
-    const result = await Company.filterByName("net");
-    expect(result).toEqual([
-      {
-        handle: "study-networks",
-        name: "Study Networks",
-        description: "Educational network provider",
-        numEmployees: 50,
-        logoUrl: "http://example.com/logo.png",
-      },
-      {
-        handle: "networks-unlimited",
-        name: "Networks Unlimited",
-        description: "IT networking solutions",
-        numEmployees: 200,
-        logoUrl: "http://example.com/logo2.png",
-      },
-    ]);
   });
 });
 

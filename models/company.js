@@ -49,7 +49,7 @@ class Company {
    * */
   // PART 2.2 ADD FILTERS FOR name, minEmployees, maxEmployees
   static async findAll(searchFilters = {}) {
-    const query = `SELECT handle,
+    let query = `SELECT handle,
                   name,
                   description,
                   num_employees AS "numEmployees",
@@ -89,6 +89,10 @@ class Company {
     // Finalize query and return results
 
     query += " ORDER BY name ";
+
+    console.log("Query:", query);
+    console.log("Values:", queryValues);
+
     const companiesRes = await db.query(query, queryValues);
     return companiesRes.rows;
   }
