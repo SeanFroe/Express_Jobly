@@ -58,7 +58,7 @@ describe("create", function () {
 });
 
 /************************************** findAll */
-
+// ----------- PART 2 Sean WROTE this CODE -------//
 describe("findAll", function () {
   test("works: no filter", async function () {
     let companies = await Company.findAll();
@@ -99,7 +99,7 @@ describe("findAll", function () {
     ]);
   });
 });
-
+// -------- end of sean's  PART 2 written code--------------/
 /************************************** get */
 
 describe("get", function () {

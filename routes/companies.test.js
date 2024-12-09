@@ -94,7 +94,7 @@ describe("GET /companies", function () {
       ],
     });
   });
-
+  //------ PART 2.3 Code Sean wrote --------------------------//
   test("works: filtering", async function () {
     const resp = await request(app)
       .get("/companies")
@@ -134,7 +134,7 @@ describe("GET /companies", function () {
       .query({ minEmployees: 2, notParam: "I'm not a Param" });
     expect(resp.statusCode).toEqual(400);
   });
-
+  // ------------ PART 2.3 end Test Sean Wrote ------------------------------------//
   test("fails: test next() handler", async function () {
     // there's no normal failure event which will cause this route to fail ---
     // thus making it hard to test that the error-handler works with it. This
