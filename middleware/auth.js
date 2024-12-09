@@ -45,7 +45,7 @@ function ensureLoggedIn(req, res, next) {
  *
  * if not, raise Unauthorized.
  */
-
+//----------------- PART 3 Code Sean Wrote -----------------------------------//
 function ensureAdmin(req, res, next) {
   try {
     if (!res.local.user || !res.locals.user.isAdmin) {
@@ -74,7 +74,7 @@ function ensureCorrectUserOrAdmin(req, res, next) {
     return next(err);
   }
 }
-
+//-------------- PART 3 end of code SEAN WROTE --------------------------------//
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
