@@ -48,7 +48,7 @@ function ensureLoggedIn(req, res, next) {
 //----------------- PART 3 Code Sean Wrote -----------------------------------//
 function ensureAdmin(req, res, next) {
   try {
-    if (!res.local.user || !res.locals.user.isAdmin) {
+    if (!res.locals.user || !res.locals.user.isAdmin) {
       throw new UnauthorizedError();
     }
     return next();
