@@ -57,7 +57,7 @@ router.get("/", async function (req, res, next) {
   if (q.minEmployees !== undefined) q.minEmployees = parseInt(q.minEmployees);
   if (q.maxEmployees !== undefined) q.maxEmployees = parseInt(q.maxEmployees);
   try {
-    const validator = jsonschema.validator(q, companySearchSchema);
+    const validator = jsonschema.validate(q, companySearchSchema);
     if (!validator.valid) {
       const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);

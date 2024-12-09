@@ -82,7 +82,7 @@ class Company {
       whereExpressions.push(`num_employees <= $${queryValues.length}`);
     }
 
-    if (whereExpressions > 0) {
+    if (whereExpressions.length > 0) {
       query += " WHERE " + whereExpressions.join(" AND ");
     }
 
