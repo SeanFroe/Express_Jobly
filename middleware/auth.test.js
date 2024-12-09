@@ -109,3 +109,45 @@ describe("ensureAdmin", () => {
     ensureAdmin(req, res, next);
   });
 });
+
+describe("ensureCorrectUserOrAdmin", () => {
+  test("works: admin", () => {
+    expect.assertions(1);
+    const req = { params: { username: "test" } };
+    const res = { locals: { user: { username: "admin", isAdmin: true } } };
+    const next = (err) => {
+      expect(err).toBeFalsy();
+    };
+    ensureCorrectUserOrAdmin(req, res, next);
+  });
+
+  test("works: same user", () => {
+    expect.assertions(1);
+    const req = { params: { username: "test" } };
+    const res = { locals: { user: { username: "test", isAdmin: false } } };
+    const next = (err) => {
+      expect(err).toBeFalsy();
+    };
+    ensureCorrectUserOrAdmin(req, res, next);
+  });
+  test("unauth: mismatch", () => {
+    expect.assertions(1);
+    const req = { params: { username: "wrong" } };
+    const res = { locals: { user: { username: "test", isAdmin: false } } };
+    const next = (err) => {
+      expect(err instanceof UnauthorizedError).toBeTruthy();
+    };
+    ensureCorrectUserOrAdmin(req, res, next);
+  });
+
+  test("unauth: if anon", () => {
+    expect.assertions(1);
+    const req = { params: { username: "test" } };
+    const res = { locals: {} };
+    const next = (err) => {
+      expect(err instanceof UnauthorizedError).toBeTruthy();
+    };
+    ensureCorrectUserOrAdmin(req, res, next);
+  });
+});
+// ------------ END OF PART 3.1 SEAN WROTE THIS --------------//
