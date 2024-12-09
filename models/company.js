@@ -47,7 +47,7 @@ class Company {
    * -maxEmployees
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
-  // PART 2.2 ADD FILTERS FOR name, minEmployees, maxEmployees
+  // PART 2.2 ADD FILTERS FOR name, minEmployees, maxEmployees ----- Sean Wrote this code -------//
   static async findAll(searchFilters = {}) {
     let query = `SELECT handle,
                   name,
@@ -96,6 +96,7 @@ class Company {
     const companiesRes = await db.query(query, queryValues);
     return companiesRes.rows;
   }
+  // -------- end PART 2.2 SEAN wrote this code -----------------//
 
   /** Given a company handle, return data about company.
    *
