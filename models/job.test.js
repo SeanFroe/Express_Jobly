@@ -29,5 +29,20 @@ describe("create", () => {
   test("works", async () => {
     let job = await Job.create(newJob);
     expect(job).toEqual(newJob);
+
+    const results = await db.query(
+      `SELECT id, title, salary, equity, company_handle
+        FROM jobs
+        WHERE id = 200 `
+    );
+    expect(results.rows).toEqual([
+      {
+        id: 200,
+        title: "New",
+        salary: 10000,
+        equity: "1",
+        company_handle: "c1",
+      },
+    ]);
   });
 });
