@@ -204,7 +204,7 @@ describe("PATCH /companies/:handle", function () {
       },
     });
   });
-
+  //-------------------- Sean Wrote this ------------------//
   test("unauth for non-admin", async function () {
     //
     const resp = await request(app)
@@ -215,7 +215,7 @@ describe("PATCH /companies/:handle", function () {
       .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(401);
   });
-
+  //-------------------------------------------------------//
   test("unauth for anon", async function () {
     const resp = await request(app).patch(`/companies/c1`).send({
       name: "C1-new",
