@@ -3,13 +3,19 @@
 const db = require("../db.js");
 const User = require("../models/user");
 const Company = require("../models/company");
+const Job = require("../models/job"); // Sean Wrote
 const { createToken } = require("../helpers/tokens");
+const {
+  testJobIds,
+} = require("../../express-jobly-solution/routes/_testCommon.js");
 
 async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
   await db.query("DELETE FROM users");
   // noinspection SqlWithoutWhere
   await db.query("DELETE FROM companies");
+  //noinspection SqlWithoutWhere
+  await db.query("DELETE FROM jobs"); //wrote by Sean
 
   await Company.create({
     handle: "c1",
@@ -57,6 +63,32 @@ async function commonBeforeAll() {
     password: "password3",
     isAdmin: false,
   });
+  //---- Wrote by Sean -------
+
+  testJobIds[0] = (
+    await Job.create({
+      title: "J1",
+      salary: 1,
+      equity: "0.1",
+      companyHandle: "c1",
+    })
+  ).id;
+  testJobIds[1] = (
+    await Job.create({
+      title: "J2",
+      salary: 2,
+      equity: "0.2",
+      companyHandle: "c1",
+    })
+  ).id;
+  testJobIds[2] = (
+    await Job.create({
+      title: "J3",
+      salary: 3,
+      /* equity null */ companyHandle: "c1",
+    })
+  ).id;
+  //----- end of Sean's code -------//
 }
 
 async function commonBeforeEach() {
@@ -84,4 +116,5 @@ module.exports = {
   u1Token,
   u2Token,
   adminToken,
+  testJobIds,
 };

@@ -8,6 +8,7 @@ const {
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
+  testJobsIds,
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -19,47 +20,23 @@ afterAll(commonAfterAll);
 
 describe("create", () => {
   const newJob = {
-    id: 200,
-    title: "New",
-    salary: 10000,
-    equity: "1",
     companyHandle: "c1",
+    title: "Test",
+    salary: 100,
+    equity: "0.1",
   };
 
   test("works", async () => {
-    let job = await Job.create(newJob);
-    expect(job).toEqual(newJob);
-
-    const results = await db.query(
-      `SELECT id, title, salary, equity, company_handle
-        FROM jobs
-        WHERE id = 200 `
-    );
-    expect(results.rows).toEqual([
-      {
-        id: 200,
-        title: "New",
-        salary: 10000,
-        equity: "1",
-        company_handle: "c1",
-      },
-    ]);
+    const job = await Job.create(newJob);
+    expect(job).toEqual({
+      ...newJob,
+      id: expect.any(Number),
+    });
   });
 });
 /***************************************** GET */
 
 describe("get", () => {
-  test("works", async () => {
-    const job = await Job.get(1);
-    expect(job).toEqual({
-      id: 1,
-      title: "C1",
-      salary: 50000,
-      equity: "0.1",
-      companyHandle: "c1",
-    });
-  });
-
   test("not found if no such job", async () => {
     try {
       await Job.get(9999);

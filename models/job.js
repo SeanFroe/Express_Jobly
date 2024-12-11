@@ -8,44 +8,26 @@ const { sqlForPartialUpdate } = require("../helpers/sql");
 class Job {
   /** Create a Job (from data), update db, return new job data.
    *
-   * data should be { id, title, salary, equity, companyHandle }
+   * data should be { title, salary, equity, companyHandle }
    *
    * Returns { id, title, salary, equity, companyHandle }
    *
    * Throws BadRequestError if company already in database.
    * */
 
-  static async create({ id, title, salary, equity, companyHandle }) {
+  static async create(data) {
     // Check if the companyHandle exists
-    const companyCheck = await db.query(
-      `SELECT handle
-      FROM companies
-      WHERE handle = $1`,
-      [companyHandle]
+    const jobRes = await db.query(
+      `INSERT INTO jobs (title,
+                             salary,
+                             equity,
+                             company_handle)
+           VALUES ($1, $2, $3, $4)
+           RETURNING id, title, salary, equity, company_handle AS "companyHandle"`,
+      [data.title, data.salary, data.equity, data.companyHandle]
     );
 
-    if (!companyCheck.rows[0]) {
-      throw new BadRequestError(`Invalid company_handle: ${companyHandle}`);
-    }
-    //Check for duplicate job ID
-    const duplicateCheck = await db.query(
-      `SELECT id
-             FROM jobs
-             WHERE id = $1`,
-      [id]
-    );
-
-    if (duplicateCheck.rows[0])
-      throw new BadRequestError(`Duplicate job: ${id}`);
-    // Insert new job
-    const result = await db.query(
-      `INSERT INTO jobs
-             (id, title, salary, equity, company_handle)
-             VALUES ($1, $2, $3, $4, $5)
-             RETURNING id, title, salary, equity, company_handle AS "companyHandle"`,
-      [id, title, salary, equity, companyHandle]
-    );
-    const job = result.rows[0];
+    const job = jobRes.rows[0];
 
     return job;
   }
@@ -58,23 +40,37 @@ class Job {
    * Throws NotFoundError if not found.
    **/
 
-  static async get(id) {
-    const jobRes = await db.query(
-      `SELECT id,
+  static async get(id = null) {
+    if (id) {
+      const jobRes = await db.query(
+        `SELECT id,
                 title,
                 salary,
                 equity,
                 company_handle AS "companyHandle"
           FROM jobs
           WHERE id = $1`,
-      [id]
+        [id]
+      );
+
+      const job = jobRes.rows[0];
+
+      if (!job) throw new NotFoundError(`No job with id: ${id}`);
+      return job;
+    }
+
+    // Fetch all jobs if no ID is provided
+    const jobRes = await db.query(
+      `SELECT id,
+              title,
+              salary,
+              equity,
+              company_handle AS "companyHandle"
+        FROM jobs
+        ORDER BY title`
     );
 
-    const job = jobRes.rows[0];
-
-    if (!job) throw new NotFoundError(`No job: ${id}`);
-
-    return job;
+    return jobRes.rows;
   }
 }
 
