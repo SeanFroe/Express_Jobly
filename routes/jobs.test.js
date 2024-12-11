@@ -143,4 +143,29 @@ describe("GET /jobs", () => {
       ],
     });
   });
+
+  test("works: filtering on 2 filters", async () => {
+    const resp = await request(app)
+      .get(`/jobs`)
+      .query({ minSalary: 2, title: "3" });
+    expect(resp.body).toEqual({
+      jobs: [
+        {
+          id: expect.any(Number),
+          title: "J3",
+          salary: 3,
+          equity: null,
+          companyHandle: "c1",
+          companyName: "C1",
+        },
+      ],
+    });
+  });
+
+  test("bad request on invaild filter key", async () => {
+    const resp = await request(app)
+      .get(`/jobs`)
+      .query({ minSalary: 2, nope: " nope" });
+    expect(resp.statusCode).toEqual(400);
+  });
 });
