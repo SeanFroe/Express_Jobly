@@ -200,7 +200,7 @@ describe("GET /jobs/:id", () => {
 
 /************************************** PATCH /jobs/:id */
 
-describe("PATCH /jobs/:id", function () {
+describe("PATCH /jobs/:id", () => {
   test("works for admin", async function () {
     const resp = await request(app)
       .patch(`/jobs/${testJobIds[0]}`)
@@ -219,7 +219,7 @@ describe("PATCH /jobs/:id", function () {
     });
   });
 
-  test("unauth for others", async function () {
+  test("unauth for others", async () => {
     const resp = await request(app)
       .patch(`/jobs/${testJobIds[0]}`)
       .send({
@@ -229,7 +229,7 @@ describe("PATCH /jobs/:id", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
-  test("not found on no such job", async function () {
+  test("not found on no such job", async () => {
     const resp = await request(app)
       .patch(`/jobs/0`)
       .send({
@@ -239,7 +239,7 @@ describe("PATCH /jobs/:id", function () {
     expect(resp.statusCode).toEqual(400);
   });
 
-  test("bad request on handle change attempt", async function () {
+  test("bad request on handle change attempt", async () => {
     const resp = await request(app)
       .patch(`/jobs/${testJobIds[0]}`)
       .send({
@@ -249,7 +249,7 @@ describe("PATCH /jobs/:id", function () {
     expect(resp.statusCode).toEqual(400);
   });
 
-  test("bad request with invalid data", async function () {
+  test("bad request with invalid data", async () => {
     const resp = await request(app)
       .patch(`/jobs/${testJobIds[0]}`)
       .send({
@@ -257,5 +257,34 @@ describe("PATCH /jobs/:id", function () {
       })
       .set("authorization", `Bearer ${adminToken}`);
     expect(resp.statusCode).toEqual(400);
+  });
+});
+
+/************************************** DELETE /jobs/:id */
+
+describe("DELETE /jobs/:id", () => {
+  test("works for admin", async function () {
+    const resp = await request(app)
+      .delete(`/jobs/${testJobIds[0]}`)
+      .set("authorization", `Bearer ${adminToken}`);
+    expect(resp.body).toEqual({ deleted: testJobIds[0] });
+  });
+
+  test("unauth for others", async () => {
+    const resp = await request(app)
+      .delete(`/jobs/${testJobIds[0]}`)
+      .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(401);
+  });
+  test("unauth for anon", async () => {
+    const resp = await request(app).delete(`/jobs/${testJobIds[0]}`);
+    expect(resp.statusCode).toEqual(401);
+  });
+
+  test("not found for no such job", async () => {
+    const resp = await request(app)
+      .delete(`/jobs/0`)
+      .set("authorization", `Bearer ${adminToken}`);
+    expect(resp.statusCode).toEqual(404);
   });
 });

@@ -111,4 +111,18 @@ router.patch("/:id", ensureAdmin, async (req, res, next) => {
   }
 });
 
+/** DELETE /[handle]  =>  { deleted: id }
+ *
+ * Authorization required: admin
+ */
+
+router.delete("/:id", ensureAdmin, async function (req, res, next) {
+  try {
+    await Job.remove(req.params.id);
+    return res.json({ deleted: parseInt(req.params.id) });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 module.exports = router;
