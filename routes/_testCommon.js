@@ -5,9 +5,7 @@ const User = require("../models/user");
 const Company = require("../models/company");
 const Job = require("../models/job"); // Sean Wrote
 const { createToken } = require("../helpers/tokens");
-const {
-  testJobIds,
-} = require("../../express-jobly-solution/routes/_testCommon.js");
+const { testJobIds } = require("../../express-jobly/routes/_testCommon.js");
 
 async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
