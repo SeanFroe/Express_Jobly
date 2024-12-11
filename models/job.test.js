@@ -1,3 +1,5 @@
+/** ENTIRE PAGE WRITTEN BY SEAN */
+
 "use strict";
 
 const db = require("../db.js");
@@ -60,6 +62,44 @@ describe("get", () => {
       fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+});
+
+/************************************** update */
+
+describe("update", () => {
+  const updateData = {
+    title: "New",
+    salary: 500,
+    equity: "0.5",
+  };
+  test("works", async function () {
+    const job = await Job.update(testJobIds[0], updateData);
+    expect(job).toEqual({
+      id: testJobIds[0],
+      companyHandle: "c1",
+      ...updateData,
+    });
+  });
+
+  test("not found if no such job", async () => {
+    try {
+      await Job.update(0, {
+        title: "test",
+      });
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+
+  test("bad request with no data", async () => {
+    try {
+      await Job.update(testJobIds[0], {});
+      fail();
+    } catch (err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
     }
   });
 });
