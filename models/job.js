@@ -40,7 +40,7 @@ class Job {
                         j.company_handle AS "companyHandle",
                         c.name AS "companyName"
                  FROM jobs j 
-                   LEFT JOIN companies AS c ON c.handle = j.company_handle`;
+                      LEFT JOIN companies AS c ON c.handle = j.company_handle`;
     const whereExpressions = [];
     const queryValues = [];
 
