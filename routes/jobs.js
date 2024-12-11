@@ -71,21 +71,21 @@ router.get("/", async function (req, res, next) {
   }
 });
 
-/** GET /[handle]  =>  { company }
+/** GET /[jobId] => { job }
  *
- *  Company is { handle, name, description, numEmployees, logoUrl, jobs }
- *   where jobs is [{ id, title, salary, equity }, ...]
+ * Returns { id, title, salary, equity, company }
+ *   where company is { handle, name, description, numEmployees, logoUrl}
  *
  * Authorization required: none
  */
 
-// router.get("/:handle", async function (req, res, next) {
-//   try {
-//     const company = await Company.get(req.params.handle);
-//     return res.json({ company });
-//   } catch (err) {
-//     return next(err);
-//   }
-// });
+router.get("/:id", async (req, res, next) => {
+  try {
+    const job = await Job.get(req.params.id);
+    return res.json({ job });
+  } catch (err) {
+    return next(err);
+  }
+});
 
 module.exports = router;
