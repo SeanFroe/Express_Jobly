@@ -13,8 +13,9 @@ const {
 const { BadRequestError } = require("../expressError");
 const Jobs = require("../models/job");
 const { createToken } = require("../helpers/tokens");
-const userNewSchema = require("../schemas/jobNew.json");
-const userUpdateSchema = require("../schemas/userUpdate.json");
+const jobNewSchema = require("../schemas/jobNew.json");
+const jobUpdateSchema = require("../schemas/jobUpdate.json");
+const jobSearchSchema = require("../schemas/jobSerach.json");
 
 const router = express.Router();
 
