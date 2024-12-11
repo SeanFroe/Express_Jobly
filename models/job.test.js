@@ -36,6 +36,112 @@ describe("create", () => {
     });
   });
 });
+
+/************************************** findAll */
+
+describe("findAll", () => {
+  test("works: no filter", async () => {
+    let jobs = await Job.findAll();
+    expect(jobs).toEqual([
+      {
+        id: testJobIds[0],
+        title: "Job1",
+        salary: 100,
+        equity: "0.1",
+        companyHandle: "c1",
+        companyName: "C1",
+      },
+      {
+        id: testJobIds[1],
+        title: "Job2",
+        salary: 200,
+        equity: "0.2",
+        companyHandle: "c1",
+        companyName: "C1",
+      },
+      {
+        id: testJobIds[2],
+        title: "Job3",
+        salary: 300,
+        equity: "0",
+        companyHandle: "c1",
+        companyName: "C1",
+      },
+      {
+        id: testJobIds[3],
+        title: "Job4",
+        salary: null,
+        equity: null,
+        companyHandle: "c1",
+        companyName: "C1",
+      },
+    ]);
+  });
+
+  test("works: by min salary", async () => {
+    let jobs = await Job.findAll({ minSalary: 250 });
+    expect(jobs).toEqual([
+      {
+        id: testJobIds[2],
+        title: "Job3",
+        salary: 300,
+        equity: "0",
+        companyHandle: "c1",
+        companyName: "C1",
+      },
+    ]);
+  });
+
+  test("works: by equity", async () => {
+    let jobs = await Job.findAll({ hasEquity: true });
+    expect(jobs).toEqual([
+      {
+        id: testJobIds[0],
+        title: "Job1",
+        salary: 100,
+        equity: "0.1",
+        companyHandle: "c1",
+        companyName: "C1",
+      },
+      {
+        id: testJobIds[1],
+        title: "Job2",
+        salary: 200,
+        equity: "0.2",
+        companyHandle: "c1",
+        companyName: "C1",
+      },
+    ]);
+  });
+
+  test("works: by min salary & equity", async () => {
+    let jobs = await Job.findAll({ minSalary: 150, hasEquity: true });
+    expect(jobs).toEqual([
+      {
+        id: testJobIds[1],
+        title: "Job2",
+        salary: 200,
+        equity: "0.2",
+        companyHandle: "c1",
+        companyName: "C1",
+      },
+    ]);
+  });
+
+  test("works: by name", async () => {
+    let jobs = await Job.findAll({ title: "ob1" });
+    expect(jobs).toEqual([
+      {
+        id: testJobIds[0],
+        title: "Job1",
+        salary: 100,
+        equity: "0.1",
+        companyHandle: "c1",
+        companyName: "C1",
+      },
+    ]);
+  });
+});
 /***************************************** GET */
 
 describe("get", () => {

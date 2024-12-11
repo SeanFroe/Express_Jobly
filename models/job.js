@@ -42,7 +42,7 @@ class Job {
                  FROM jobs j 
                    LEFT JOIN companies AS c ON c.handle = j.company_handle`;
     const whereExpressions = [];
-    let queryValues = [];
+    const queryValues = [];
 
     // For each possible search term, add to whereExpressions and
     // queryValues so we can generate the right SQL
