@@ -40,37 +40,37 @@ class Job {
    * Throws NotFoundError if not found.
    **/
 
-  static async get(id = null) {
-    if (id) {
-      const jobRes = await db.query(
-        `SELECT id,
+  static async get(id) {
+    const jobRes = await db.query(
+      `SELECT id,
                 title,
                 salary,
                 equity,
                 company_handle AS "companyHandle"
           FROM jobs
           WHERE id = $1`,
-        [id]
-      );
-
-      const job = jobRes.rows[0];
-
-      if (!job) throw new NotFoundError(`No job with id: ${id}`);
-      return job;
-    }
-
-    // Fetch all jobs if no ID is provided
-    const jobRes = await db.query(
-      `SELECT id,
-              title,
-              salary,
-              equity,
-              company_handle AS "companyHandle"
-        FROM jobs
-        ORDER BY title`
+      [id]
     );
 
-    return jobRes.rows;
+    const job = jobRes.rows[0];
+
+    if (!job) throw new NotFoundError(`No job with id: ${id}`);
+
+    const companiesRes = await db.query(
+      `SELECT handle,
+              name,
+              description,
+              num_employees AS "numEmployees",
+              logo_url AS "logoUrl"
+       FROM companies
+       WHERE handle = $1`,
+      [job.companyHandle]
+    );
+
+    delete job.companyHandle;
+    job.company = companiesRes.rows[0];
+
+    return job;
   }
 }
 
