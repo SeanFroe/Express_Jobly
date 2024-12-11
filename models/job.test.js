@@ -8,7 +8,7 @@ const {
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
-  testJobsIds,
+  testJobIds,
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -37,6 +37,23 @@ describe("create", () => {
 /***************************************** GET */
 
 describe("get", () => {
+  test("works", async () => {
+    let job = await Job.get(testJobIds[0]);
+    expect(job).toEqual({
+      id: testJobIds[0],
+      title: "Job1",
+      salary: 100,
+      equity: "0.1",
+      company: {
+        handle: "c1",
+        name: "C1",
+        description: "Desc1",
+        numEmployees: 1,
+        logoUrl: "http://c1.img",
+      },
+    });
+  });
+
   test("not found if no such job", async () => {
     try {
       await Job.get(9999);
