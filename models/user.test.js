@@ -234,7 +234,7 @@ describe("remove", function () {
 
 describe("applyToJob", () => {
   test("works", async () => {
-    await User.appyToJob("u1", testJobIds[1]);
+    await User.applyToJob("u1", testJobIds[1]);
 
     const res = await db.query("SELECT * FROM applications WHERE job_id=$1", [
       testJobIds[1],
@@ -249,7 +249,7 @@ describe("applyToJob", () => {
 
   test("not found if no such job", async () => {
     try {
-      await User.appyToJob("u1", 0, "applied");
+      await User.applyToJob("u1", 0, "applied");
       fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy;

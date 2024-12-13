@@ -208,7 +208,7 @@ class User {
    * -jobId: job id
    */
 
-  static async appyToJob(username, jobId) {
+  static async applyToJob(username, jobId) {
     const preCheck = await db.query(
       `SELECT id
           FROM jobs
